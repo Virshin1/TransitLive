@@ -12,6 +12,11 @@ function Header() {
   // Get current route to highlight active navigation item
   const location = useLocation();
 
+  // Don't show header on admin pages
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">

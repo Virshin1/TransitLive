@@ -54,7 +54,8 @@ function AlertTicker() {
   if (alerts.length === 0) return null;
 
   // Determine how many times to duplicate based on alert count
-  const duplicateCount = alerts.length <= 3 ? 4 : 2;
+  // Increase duplication to ensure full coverage of marquee
+  const duplicateCount = alerts.length <= 2 ? 8 : alerts.length <= 4 ? 6 : 4;
 
   // Helper to get icon based on alert type
   const getAlertIcon = (alertType) => {

@@ -47,9 +47,21 @@ export const apiService = {
   // Get only active alerts (convenience method)
   getActiveAlerts: () => api.get('/alerts?active=true'),
   getAlert: (id) => api.get(`/alerts/${id}`),
-  createAlert: (data) => api.post('/alerts', data),
-  updateAlert: (id, data) => api.put(`/alerts/${id}`, data),
-  deleteAlert: (id) => api.delete(`/alerts/${id}`),
+  createAlert: (data, token) => {
+    return api.post('/alerts', data, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
+  updateAlert: (id, data, token) => {
+    return api.put(`/alerts/${id}`, data, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
+  deleteAlert: (id, token) => {
+    return api.delete(`/alerts/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
 
   // Auth
   login: (credentials) => api.post('/auth/login', credentials),
