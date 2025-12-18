@@ -12,6 +12,9 @@ import { Button } from '../components/ui/button';
 import apiService from '../services/api';
 import socketService from '../services/socket';
 
+
+
+
 // Helper to get transit icon based on route type
 const getTransitIcon = (routeType) => {
   const type = (routeType || 'bus').toLowerCase();
@@ -66,6 +69,14 @@ function StopDetails() {
       const stopPredictions = updates
         .filter(update => update.stopId.toString() === id)
         .map(update => {
+          // Handle cancelled predictions
+          if (update.status === 'cancelled' || !update.predictedArrival) {
+            return {
+              ...update,
+              secondsUntilArrival: 0
+            };
+          }
+          
           const now = new Date();
           const arrivalTime = new Date(update.predictedArrival);
           const secondsUntilArrival = Math.max(0, Math.floor((arrivalTime - now) / 1000));
@@ -216,12 +227,18 @@ function StopDetails() {
                     </div>
 
                     {/* Arrival time badge */}
-                    <Badge
-                      variant={getTimeVariant(prediction.secondsUntilArrival)}
-                      className="px-4 py-2 text-base"
-                    >
-                      {formatTime(prediction.secondsUntilArrival)}
-                    </Badge>
+                    {prediction.status === 'cancelled' ? (
+                      <Badge variant="destructive" className="px-4 py-2 text-base">
+                        Cancelled
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant={getTimeVariant(prediction.secondsUntilArrival)}
+                        className="px-4 py-2 text-base"
+                      >
+                        {formatTime(prediction.secondsUntilArrival)}
+                      </Badge>
+                    )}
                   </div>
                 ))}
               </div>

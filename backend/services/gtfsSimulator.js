@@ -85,11 +85,38 @@ function generateRandomArrival() {
 /**
  * Update predictions with realistic changes
  */
-function updatePredictions() {
+async function updatePredictions() {
   const updates = [];
+  
+  // Get all active cancellation alerts
+  const cancellationAlerts = await Alert.find({
+    isActive: true,
+    alertType: 'cancellation'
+  }).select('affectedRoutes');
+  
+  // Create a Set of cancelled route IDs for fast lookup
+  const cancelledRouteIds = new Set();
+  cancellationAlerts.forEach(alert => {
+    alert.affectedRoutes.forEach(routeId => {
+      cancelledRouteIds.add(routeId.toString());
+    });
+  });
   
   for (const [key, prediction] of predictions.entries()) {
     const vehiclePos = vehiclePositions.get(prediction.vehicleId);
+    
+    // Check if this route has an active cancellation alert
+    const isCancelled = cancelledRouteIds.has(prediction.routeId.toString());
+    
+    if (isCancelled) {
+      // Mark prediction as cancelled and don't show arrival times
+      prediction.status = 'cancelled';
+      prediction.predictedArrival = null;
+      prediction.delay = 0;
+      prediction.timestamp = new Date();
+      updates.push({ ...prediction });
+      continue; // Skip normal processing for cancelled routes
+    }
     
     // Update visited status based on vehicle position and direction
     if (vehiclePos) {
@@ -158,7 +185,7 @@ function updatePredictions() {
       prediction.predictedArrival = new Date(prediction.predictedArrival.getTime() + delayMinutes * 60000);
     }
     
-    // Randomly introduce cancellations
+    // Randomly introduce cancellations (only if not already cancelled by alert)
     if (prediction.status === 'on_time' && Math.random() < CANCELLATION_PROBABILITY / 100) {
       prediction.status = 'cancelled';
       prediction.delay = 0;
@@ -302,8 +329,8 @@ function startGTFSSimulator(io) {
   initializePredictions();
   
   // Update predictions every few seconds
-  setInterval(() => {
-    const updates = updatePredictions();
+  setInterval(async () => {
+    const updates = await updatePredictions();
     
     // Broadcast all updates
     io.emit('arrival_updates', updates);

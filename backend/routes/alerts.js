@@ -81,8 +81,8 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
       alertType,
       affectedRoutes: affectedRoutes || [],
       affectedStops: affectedStops || [],
-      startTime: startTime || new Date(),
-      endTime: endTime || null,
+      startTime: startTime ? new Date(startTime) : new Date(),
+      endTime: endTime ? new Date(endTime) : null,
       isActive: true,
       createdBy: req.user._id
     });
@@ -107,9 +107,24 @@ router.post('/', authMiddleware, adminMiddleware, async (req, res) => {
 // PUT /api/alerts/:id - Update alert (admin only)
 router.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   try {
+    // Prepare update data with proper date conversion
+    const updateData = {
+      ...req.body,
+      updatedAt: new Date(),
+      $inc: { updateCount: 1 }
+    };
+    
+    // Convert date strings to Date objects if provided
+    if (updateData.startTime) {
+      updateData.startTime = new Date(updateData.startTime);
+    }
+    if (updateData.endTime) {
+      updateData.endTime = new Date(updateData.endTime);
+    }
+    
     const alert = await Alert.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     )
       .populate('affectedRoutes', 'routeId routeName')
