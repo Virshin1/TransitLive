@@ -1,4 +1,4 @@
-# TransitLive 🚍
+# TransitLive 
 
 A real-time public transportation status dashboard featuring live vehicle tracking, service alerts, and admin management capabilities. Built with React, Node.js, Express, MongoDB, and Socket.IO.
 
@@ -6,7 +6,7 @@ A real-time public transportation status dashboard featuring live vehicle tracki
 ![Node](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen.svg)
 ![React](https://img.shields.io/badge/react-18.2.0-blue.svg)
 
-## ✨ Features
+## Features
 
 ### Public Features
 - **Real-time Vehicle Tracking**: Live updates of bus/train positions and arrival predictions
@@ -46,7 +46,7 @@ A real-time public transportation status dashboard featuring live vehicle tracki
 - **JWT** - Authentication
 - **bcryptjs** - Password hashing
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before running this project, ensure you have the following installed:
 
@@ -55,7 +55,7 @@ Before running this project, ensure you have the following installed:
 - **MongoDB** (v4.4 or higher)
 - **Git**
 
-## 🚀 Installation
+## Installation
 
 ### 1. Clone the Repository
 ```bash
@@ -102,7 +102,7 @@ REACT_APP_SOCKET_URL=http://localhost:5001
 EOF
 ```
 
-## 🏃 Running the Application
+## Running the Application
 
 ### Using the Convenience Scripts (Recommended)
 
@@ -189,13 +189,10 @@ TransitLive/
 │   │   └── index.css               # Global styles
 │   ├── package.json
 │   └── .env
-├── start.sh                        # Start script
-├── stop.sh                         # Stop script
-├── verify.sh                       # Verification script
 └── README.md
 ```
 
-## 🔌 API Documentation
+## API Documentation
 
 ### Base URL
 ```
@@ -226,13 +223,13 @@ Authorization: Bearer <your_jwt_token>
 - `GET /alerts` - Get all alerts (query params: active, severity, type)
 - `GET /alerts?active=true` - Get only active alerts
 - `GET /alerts/:id` - Get alert details by ID
-- `POST /alerts` - Create new alert (admin only) 🔒
-- `PUT /alerts/:id` - Update alert (admin only) 🔒
-- `DELETE /alerts/:id` - Delete alert (admin only) 🔒
+- `POST /alerts` - Create new alert (admin only) 
+- `PUT /alerts/:id` - Update alert (admin only) 
+- `DELETE /alerts/:id` - Delete alert (admin only) 
 
 #### Authentication
 - `POST /auth/login` - Admin login (returns JWT token)
-- `GET /auth/me` - Get current user info (requires JWT) 🔒
+- `GET /auth/me` - Get current user info (requires JWT) 
 
 ### Example API Calls
 
@@ -261,7 +258,7 @@ curl -X POST http://localhost:5001/api/alerts \
   }'
 ```
 
-## 🔄 WebSocket Events
+## WebSocket Events
 
 ### Client → Server
 - `subscribe_stop` - Subscribe to stop updates
@@ -289,7 +286,7 @@ socketService.on('stop_arrival_update', (data) => {
 socketService.unsubscribeFromStop('STOP001');
 ```
 
-## 👤 Admin Access
+## Admin Access
 
 Default admin credentials (change these in production):
 - **Email**: admin@transitlive.com
@@ -297,7 +294,7 @@ Default admin credentials (change these in production):
 
 Access the admin panel at: `http://localhost:3000/admin/login`
 
-## 🧪 Development
+## Development
 
 ### Database Seeding
 ```bash
@@ -331,7 +328,7 @@ mongosh transitlive --eval "db.dropDatabase()"
 cd backend && npm run seed
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Backend Environment Variables
 ```env
@@ -349,7 +346,7 @@ REACT_APP_API_URL=http://localhost:5001/api
 REACT_APP_SOCKET_URL=http://localhost:5001
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### MongoDB Connection Issues
 ```bash
@@ -412,14 +409,14 @@ Contributions are welcome! Please follow these steps:
 
 This project is licensed under the ISC License.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - GTFS-Realtime specification by Google
 - Socket.IO for real-time communication
 - MongoDB for flexible data storage
 - React community for excellent tooling
 
-## 📧 Contact
+## Contact
 
 For questions or support, please open an issue in the repository.
 
